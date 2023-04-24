@@ -1,10 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <title>Book</title>
 </head>
 <body>
-$END$
+
+<a th:text="${book.getTitle()} + ', ' + ${book.getAuthor()} + ', ' + ${book.getYear()}">Book info</a>
+<br/>
+<hr/>
+
+<form th:if="${book.getPerson_id() == null}" th:method="PATCH"
+      th:action="@{/books/{id}/add_user(id = ${book.getId()})}">
+    This book is free.
+    <br/>
+    <label for="add_user">Choose user: </label>
+    <select id="add_user" th:object="${person}" th:field="*{id}">
+        <option th:each="person : ${people}" th:value="${person.getId()}" th:text="${person.getName()}">Users</option>
+    </select>
+    <input type="submit" value="Set user">
+</form>
+
+<a th:unless="${book.getPerson_id() == null}" th:text="'User of book: '"></a>
+<br/>
+<a th:unless="${book.getPerson_id() == null}" th:href="@{/people/{id}(id = ${user.getId()})}"
+   th:text="${user.getName()}">User of book</a>
+<br/>
+<form th:unless="${book.getPerson_id() == null}" th:method="PATCH"
+      th:action="@{/books/{id}/set-free(id = ${book.getId()})}">
+    <input type="submit" value="Set book free">
+</form>
+<hr/>
+<form th:method="DELETE" th:action="@{/books/{id}(id = ${book.getId()})}">
+    <input type="submit" value="Delete">
+</form>
+<form th:method="GET" th:action="@{/books/{id}/edit(id = ${book.getId()})}">
+    <input type="submit" value="Edit">
+</form>
 </body>
 </html>
