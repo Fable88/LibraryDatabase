@@ -10,7 +10,7 @@
 <br/>
 <hr/>
 
-<form th:if="${book.getPerson_id() == null}" th:method="PATCH"
+<form th:if="${book.getOwner() == null}" th:method="PATCH"
       th:action="@{/books/{id}/add_user(id = ${book.getId()})}">
     This book is free.
     <br/>
@@ -21,12 +21,12 @@
     <input type="submit" value="Set user">
 </form>
 
-<a th:unless="${book.getPerson_id() == null}" th:text="'User of book: '"></a>
+<a th:unless="${book.getOwner() == null}" th:text="'User of book: '"></a>
 <br/>
-<a th:unless="${book.getPerson_id() == null}" th:href="@{/people/{id}(id = ${user.getId()})}"
-   th:text="${user.getName()}">User of book</a>
+<a th:unless="${book.getOwner() == null}" th:href="@{/people/{id}(id = ${book.getOwner().getId()})}"
+   th:text="${book.getOwner().getName()}">User of book</a>
 <br/>
-<form th:unless="${book.getPerson_id() == null}" th:method="PATCH"
+<form th:unless="${book.getOwner() == null}" th:method="PATCH"
       th:action="@{/books/{id}/set-free(id = ${book.getId()})}">
     <input type="submit" value="Set book free">
 </form>

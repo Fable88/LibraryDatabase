@@ -1,6 +1,6 @@
 package library.utils;
 
-import library.model.Book;
+import library.models.Book;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;

@@ -1,24 +1,24 @@
 package library.utils;
 
-import library.dao.PersonDAO;
-import library.model.Person;
+import library.models.Person;
+import library.services.PeopleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Component
 public class PersonValidator implements Validator {
 
     private final String DATE_PATTERN = "dd.MM.yyyy";
-    private final PersonDAO personDAO;
+    private final PeopleService peopleService;
 
     @Autowired
-    public PersonValidator(PersonDAO personDAO) {
-        this.personDAO = personDAO;
+    public PersonValidator(PeopleService peopleService) {
+        this.peopleService = peopleService;
     }
 
     @Override
@@ -38,18 +38,27 @@ public class PersonValidator implements Validator {
     }
 
     private void checkName(String name, Errors errors) {
-        boolean isNameExisting = personDAO.isNameExisting(name);
+        boolean isNameExisting = peopleService.isNameExisting(name);
         if (isNameExisting) errors.rejectValue("name", "", "Name should be unique.");
     }
 
-    private void checkBirthday(String birthday, Errors errors) {
+    private void checkBirthday(Date birthday, Errors errors) {
         boolean dateIsCorrect = true;
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_PATTERN);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        String formattedDate = dateFormat.format(birthday);
+
         try {
-            LocalDate.parse(birthday, formatter);
+            Date parsedDate = dateFormat.parse(formattedDate);
+            if (!formattedDate.equals(dateFormat.format(parsedDate))) {
+                dateIsCorrect = false;
+            }
         } catch (Exception e) {
             dateIsCorrect = false;
         }
-        if (!dateIsCorrect) errors.rejectValue("birthday", "", "Date format is \"" + DATE_PATTERN + "\"");
+
+        if (!dateIsCorrect) {
+            errors.rejectValue("birthday", "", "Неправильный формат даты. Используйте формат dd.MM.yyyy");
+        }
     }
+
 }

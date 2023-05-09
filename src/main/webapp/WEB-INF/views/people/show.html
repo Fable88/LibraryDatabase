@@ -5,17 +5,19 @@
     <title>User</title>
 </head>
 <body>
-<a th:text="${person.getName()} + ', ' + ${person.getBirthday()}">Person info</a>
+<a th:text="${person.getName()} + ', ' + ${person.getFormattedBirthday()}">Person info</a>
 <br/>
 <hr/>
-User's books:
-<br/>
+<p style="font-weight: bold">User's books:</p>
 <a th:if="${#lists.isEmpty(books)}">User have no books</a>
-<div th:unless="${#lists.isEmpty(books)}" th:each="book : ${books}">
-    <a th:href="@{/books/{id}(id = ${book.getId()})}" th:text="${book.getTitle()} + ', ' + ${book.getAuthor()} + ', '
-    + ${book.getYear()}">Book info</a>
-    <br/>
-</div>
+<table th:unless="${#lists.isEmpty(books)}" th:object="${books}">
+    <tr th:each="book : ${books}" th:href="@{/books/{id}(id = ${book.getId()})}">
+        <td th:text="${book.getTitle()} + ', ' + ${book.getAuthor()} + ', ' + ${book.getYear()}" th:style="${book.isOverdue()} ?
+        'color:red' : ''">
+            Book info
+        </td>
+    </tr>
+</table>
 
 <br/>
 <hr/>

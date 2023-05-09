@@ -12,17 +12,17 @@ Add new book
 <form th:method="POST" th:object="${book}" th:action="@{/books}">
     <label for="title">Enter title: </label>
     <input id="title" type="text" th:field="*{title}">
-    <div style="color: darkred" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"/>
+    <div style="color: darkred" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Title error</div>
     <br/>
 
     <label for="author">Enter author: </label>
     <input id="author" type="text" th:field="*{author}">
-    <div style="color: darkred" th:if="${#fields.hasErrors('author')}" th:errors="*{author}"/>
+    <div style="color: darkred" th:if="${#fields.hasErrors('author')}" th:errors="*{author}">Author error</div>
     <br/>
 
     <label for="year">Enter year: </label>
     <input id="year" type="text" th:field="*{year}">
-    <div style="color: darkred" th:if="${#fields.hasErrors('year')}" th:errors="*{year}"/>
+    <div style="color: darkred" th:if="${#fields.hasErrors('year')}" th:errors="*{year}">Year error</div>
     <br/>
     <hr/>
 
